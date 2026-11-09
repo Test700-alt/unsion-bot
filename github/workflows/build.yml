@@ -1,0 +1,26 @@
+name: Build C# Bot
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Unzip Project
+      run: unzip bot.zip -d ./bot
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Build and Publish
+      run: |
+        cd ./bot
+        dotnet publish -c Release -o ./publish
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: bot-release
+        path: ./bot/publish
